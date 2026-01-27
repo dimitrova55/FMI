@@ -1,12 +1,15 @@
+using fmi.Services;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var dbConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 
-var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
+builder.Services.AddSingleton<IMongoClient>(_ => new MongoClient(dbConnectionString));
 
-builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoConnectionString));
+builder.Services.AddSingleton<MongoDbService>();
+builder.Services.AddSingleton<AuthService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
