@@ -6,13 +6,15 @@ using fmi.Config;
 
 namespace fmi.Services
 {
-    public class AuthService
+    public class UserService
     {
-        IMongoCollection<User> usersCollection;
+        private IMongoCollection<User> usersCollection;
+        private JwtAuthService jwtAuthService;
 
-        public AuthService(MongoDbService mongoDbService)
+        public UserService(MongoDbService mongoDbService, JwtAuthService authService)
         {
             usersCollection = mongoDbService.GetCollection<User> (Constants.Database.FMI_DB, Constants.Database.FMI_DB_COLLECTION_USERS);
+            jwtAuthService = authService;
         }
 
         public async Task<Models.ServiceResponse<string>> Register(UserDto userDto)
@@ -24,7 +26,7 @@ namespace fmi.Services
                 return new ServiceResponse<string> {
 
                     Success = false,
-                    Message = "User Already Exists.",
+                    Message = "User Already Exists.",  
                     StatusCode = StatusCodes.Status409Conflict
                 };
             }
@@ -60,9 +62,11 @@ namespace fmi.Services
                 };
             }
 
+            var accessToken = jwtAuthService.GenerateAccessToken(savedUser);
+
             return new ServiceResponse<string>
             {
-                Data = savedUser.Username,                
+                Data = accessToken,                
                 Message = "Successfully Logged in."                
             };
         }

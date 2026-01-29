@@ -10,13 +10,13 @@ namespace fmi.Controllers
 {
     [Route("fmi/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly AuthService authService;
+        private readonly UserService userService;
 
-        public AuthController(AuthService authService)
+        public UserController(UserService userService)
         {
-            this.authService = authService;
+            this.userService = userService;
         }
 
         [HttpPost("register")]
@@ -24,7 +24,7 @@ namespace fmi.Controllers
         {
             try
             {
-                var result = await authService.Register(userDto);
+                var result = await userService.Register(userDto);
 
                 if (!result.Success)
                 {
@@ -45,7 +45,7 @@ namespace fmi.Controllers
         {
             try
             {
-                var result = await authService.Login(userDto);
+                var result = await userService.Login(userDto);
 
                 if (!result.Success)
                 {
