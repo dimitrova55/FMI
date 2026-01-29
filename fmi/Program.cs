@@ -1,9 +1,9 @@
 using fmi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using System.Text;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +15,6 @@ builder.Services.AddSingleton<MongoDbService>();
 builder.Services.AddSingleton<JwtAuthService>();
 builder.Services.AddSingleton<UserService>();
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer( options => {
@@ -33,6 +30,42 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
 
     });
+
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen( options => 
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "My Auth API", Version = "v1" });
+
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Token:"
+    };
+
+    options.AddSecurityDefinition("Bearer", jwtSecurityScheme);
+
+    var requirement = new OpenApiSecurityRequirement();
+
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+
+    requirement.Add(securityScheme, new List<string>());
+    options.AddSecurityRequirement(requirement);
+
+});
+
 
 var app = builder.Build();
 
