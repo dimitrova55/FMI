@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
-using RouteAttribute = Microsoft.AspNetCore.Components.RouteAttribute;
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using fmi.Models;
 using fmi.Services;
 using Microsoft.AspNetCore.Identity;
 
 namespace fmi.Controllers
 {
-    [Route("fmi/[controller]")]
+    [Route("fmi/")]
     [ApiController]
     public class UserController : ControllerBase
     {
