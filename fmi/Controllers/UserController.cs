@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using fmi.Models;
 using fmi.Services;
-using Microsoft.AspNetCore.Identity;
+
+
 
 namespace fmi.Controllers
 {
@@ -19,6 +18,9 @@ namespace fmi.Controllers
             this.userService = userService;
         }
 
+
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto userDto)
         {
@@ -31,7 +33,7 @@ namespace fmi.Controllers
                     return StatusCode(result.StatusCode, result.Message);
                 }
 
-                return Ok(result);
+                return Created();
             }
             catch (Exception ex)
             {
@@ -55,6 +57,21 @@ namespace fmi.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("google-signin")]
+        public async Task<IActionResult> GoogleSignin([FromBody] string googleToken)
+        {
+            try
+            {
+                var token = await userService.AuthenticateGoogleUser(googleToken);
+                
+                return Ok(token);
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

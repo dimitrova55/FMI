@@ -28,12 +28,12 @@ namespace fmi.Services
             };
 
             var access_token = new JwtSecurityToken(
-                issuer: config["Jwt:Issuer"],
-                audience: config["Jwt:Audience"],
+                issuer: config["Authentication:Jwt:Issuer"],
+                audience: config["Authentication:Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Authentication:Jwt:Key"]!)),
                     SecurityAlgorithms.HmacSha256)
             );
 
