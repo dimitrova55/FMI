@@ -44,12 +44,12 @@ cd your-repo-name
 
 ### How to get Google ID Token using Postman 
 
-1. ![Postman Config Part 1](Assets\Postman_Google_OAuth_1.PNG)
+1. ![Postman Config Part 1](fmi\Assets\Postman_Google_OAuth_1.PNG)
 
 Auth URL:  https://accounts.google.com/o/oauth2/v2/auth
 Scope: https://www.googleapis.com/auth/userinfo.email
 
-2. ![Postman Config Part 2](Assets\Postman_Google_OAuth_2.PNG)
+2. ![Postman Config Part 2](fmi\Assets\Postman_Google_OAuth_2.PNG)
 
 3. You will receive Access Token and ID Token.
 Copy the ID Token and provide it for the ../fmi/google-signin endpoint.
